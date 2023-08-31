@@ -8,10 +8,13 @@ import "./globals.css";
 // });
 
 export const metadata = {
-  title: "文庫ならしな",
+  title: {
+    default: "文庫ならしな",
+    template: "%s｜文庫ならしな",
+  },
 };
 
-export interface LayoutProps {
+interface LayoutProps {
   children: ReactNode;
 }
 

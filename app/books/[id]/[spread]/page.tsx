@@ -21,25 +21,27 @@ const SpreadPage = async ({ params }: PageProps) => {
   }
 
   return (
-    <div className="relative">
+    <>
       {Array.isArray(data.content) ? (
         data.content.map(
           (val, idx) =>
             val && (
               <div
                 key={idx}
-                className={`absolute h-full ${idx ? "right-px" : "left-px"}`}
+                className={`absolute h-full bg-[#E0E2DC] ${
+                  idx ? "right-px" : "left-px"
+                }`}
               >
                 <Renderer {...val} />
               </div>
             )
         )
       ) : (
-        <div className="absolute h-full right-0 translate-x-1/2">
+        <div className="absolute h-full right-0 translate-x-1/2 bg-[#E0E2DC]">
           <Renderer {...data.content} />
         </div>
       )}
-    </div>
+    </>
   );
 };
 

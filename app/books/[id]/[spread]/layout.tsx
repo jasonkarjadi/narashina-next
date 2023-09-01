@@ -25,6 +25,7 @@ const SpreadLayout = async ({ params, children }: LayoutProps) => {
     .from("spread")
     .select("*", { count: "exact", head: true })
     .eq("book_id", params.id);
+
   return (
     <>
       <main className="flex-1 flex" dir="rtl">
@@ -44,7 +45,9 @@ const SpreadLayout = async ({ params, children }: LayoutProps) => {
             />
           </svg>
         </PageFlip>
-        <div className="flex-1 flex justify-center relative">{children}</div>
+        <div className="flex-1 flex justify-center">
+          <div className="relative text-[#171923]">{children}</div>
+        </div>
         <PageFlip
           href={+params.spread + 1}
           ariaLabel="本書の後頁へ"

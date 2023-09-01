@@ -11,9 +11,9 @@ interface PageFlipProps {
 const PageFlip = ({ children, ariaLabel, href, last }: PageFlipProps) => {
   const isDisabled =
     typeof last === "undefined"
-      ? href <= 0
+      ? href < 0
       : typeof last === "number"
-      ? href >= last
+      ? href > last
       : true;
   return (
     <NextLink

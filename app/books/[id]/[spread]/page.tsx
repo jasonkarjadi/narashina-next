@@ -28,7 +28,7 @@ const SpreadPage = async ({ params }: PageProps) => {
             val && (
               <div
                 key={idx}
-                className={`absolute h-full bg-[#E0E2DC] ${
+                className={`absolute h-full aspect-[inherit] bg-[#E0E2DC] ${
                   idx ? "right-px" : "left-px"
                 }`}
               >
@@ -37,7 +37,7 @@ const SpreadPage = async ({ params }: PageProps) => {
             )
         )
       ) : (
-        <div className="absolute h-full right-0 translate-x-1/2 bg-[#E0E2DC]">
+        <div className="absolute h-full right-0 translate-x-1/2 aspect-[inherit] bg-[#E0E2DC]">
           <Renderer {...data.content} />
         </div>
       )}

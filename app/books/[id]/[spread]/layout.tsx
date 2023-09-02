@@ -26,6 +26,13 @@ const SpreadLayout = async ({ params, children }: LayoutProps) => {
     .select("*", { count: "exact", head: true })
     .eq("book_id", params.id);
 
+  const { data } = await supabase
+    .from("book")
+    .select("paper_width, paper_height")
+    .eq("id", params.id)
+    .limit(1)
+    .single();
+
   return (
     <>
       <main className="flex-1 flex" dir="rtl">
@@ -46,7 +53,11 @@ const SpreadLayout = async ({ params, children }: LayoutProps) => {
           </svg>
         </PageFlip>
         <div className="flex-1 flex justify-center">
-          <div className="relative text-[#171923]">{children}</div>
+          <div
+            className={`relative w-0 text-[#171923] aspect-[${data?.paper_width}/${data?.paper_height}]`}
+          >
+            {children}
+          </div>
         </div>
         <PageFlip
           href={+params.spread + 1}

@@ -13,7 +13,7 @@ const PageFlip = ({ children, ariaLabel, href, last }: PageFlipProps) => {
     typeof last === "undefined"
       ? href < 0
       : typeof last === "number"
-      ? href > last
+      ? href >= last
       : true;
   return (
     <NextLink

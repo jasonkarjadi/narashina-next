@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import NextLink from "next/link";
 import type { ReactNode } from "react";
 import PageFlip from "./PageFlip";
+import Resize from "./Resize";
 
 interface Props {
   params: { id: string; spread: string };
@@ -21,22 +22,17 @@ interface LayoutProps extends Props {
 }
 
 const SpreadLayout = async ({ params, children }: LayoutProps) => {
-  const { count } = await supabase
-    .from("spread")
-    .select("*", { count: "exact", head: true })
-    .eq("book_id", params.id);
-
   const { data } = await supabase
     .from("book")
-    .select("paper_width, paper_height")
+    .select("paper_width, paper_height, text_direction(name)")
     .eq("id", params.id)
     .limit(1)
     .single();
 
   return (
     <>
-      <main className="flex-1 flex" dir="rtl">
-        <PageFlip href={+params.spread - 1} ariaLabel="本書の前頁へ">
+      <main className="flex flex-1 overflow-x-auto justify-between" dir="rtl">
+        <PageFlip params={params} isPrevious>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -52,18 +48,8 @@ const SpreadLayout = async ({ params, children }: LayoutProps) => {
             />
           </svg>
         </PageFlip>
-        <div className="flex-1 flex justify-center">
-          <div
-            className={`relative w-0 text-[#171923] aspect-[${data?.paper_width}/${data?.paper_height}]`}
-          >
-            {children}
-          </div>
-        </div>
-        <PageFlip
-          href={+params.spread + 1}
-          ariaLabel="本書の後頁へ"
-          last={count}
-        >
+        <div className="flex text-[#171923] gap-x-px">{children}</div>
+        <PageFlip params={params}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -80,7 +66,7 @@ const SpreadLayout = async ({ params, children }: LayoutProps) => {
           </svg>
         </PageFlip>
       </main>
-      <footer className="flex h-12 items-center px-4 justify-between">
+      <footer className="flex h-12 items-center px-4 justify-between border-[#CC9966] border-t">
         <NextLink href="/books">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -148,6 +134,13 @@ const SpreadLayout = async ({ params, children }: LayoutProps) => {
           </button>
         </div>
       </footer>
+      {data && (
+        <Resize
+          width={data.paper_width}
+          height={data.paper_height}
+          writingMode={(data.text_direction as any).name}
+        />
+      )}
     </>
   );
 };

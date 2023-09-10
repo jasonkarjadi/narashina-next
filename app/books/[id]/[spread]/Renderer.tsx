@@ -14,17 +14,7 @@ interface RendererProps {
 
 const Renderer = ({ type = Fragment, props = {}, children }: RendererProps) => {
   if (type === "img" || props.src) {
-    return (
-      <NextImage
-        src={props.src}
-        alt={props.alt}
-        width={0}
-        height={0}
-        className="max-w-none h-full w-auto"
-        unoptimized
-        priority
-      />
-    );
+    return <NextImage src={props.src} alt={props.alt} fill priority />;
   }
 
   return createElement(

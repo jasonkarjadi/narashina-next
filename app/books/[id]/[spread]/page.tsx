@@ -1,7 +1,9 @@
 import supabase from "@/lib/utils/supabase";
+import { notFound } from "next/navigation";
+import Paper from "./Paper";
 import Renderer from "./Renderer";
 
-export const revalidate = 3600;
+export const revalidate = 7200;
 
 interface PageProps {
   params: { id: string; spread: string };
@@ -17,31 +19,28 @@ const SpreadPage = async ({ params }: PageProps) => {
     .single();
 
   if (!data) {
-    return <>received no data</>;
+    notFound();
+  }
+
+  if (Array.isArray(data.content)) {
+    return (
+      <>
+        {data.content.map(
+          (val, idx) =>
+            val && (
+              <Paper key={idx}>
+                <Renderer {...val} />
+              </Paper>
+            )
+        )}
+      </>
+    );
   }
 
   return (
-    <>
-      {Array.isArray(data.content) ? (
-        data.content.map(
-          (val, idx) =>
-            val && (
-              <div
-                key={idx}
-                className={`absolute h-full aspect-[inherit] bg-[#E0E2DC] ${
-                  idx ? "right-px" : "left-px"
-                }`}
-              >
-                <Renderer {...val} />
-              </div>
-            )
-        )
-      ) : (
-        <div className="absolute h-full right-0 translate-x-1/2 aspect-[inherit] bg-[#E0E2DC]">
-          <Renderer {...data.content} />
-        </div>
-      )}
-    </>
+    <Paper>
+      <Renderer {...data.content} />
+    </Paper>
   );
 };
 
